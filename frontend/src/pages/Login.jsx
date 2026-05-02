@@ -35,8 +35,9 @@ const Login = () => {
   };
 
   return (
-    <div className="flex h-screen w-full items-center justify-center p-4">
-      <div className="glass w-full max-w-md rounded-3xl p-8 shadow-2xl">
+    <div className="h-screen w-full overflow-y-auto p-4">
+      <div className="flex min-h-full flex-col items-center justify-center py-8">
+        <div className="glass w-full max-w-md rounded-3xl p-8 shadow-2xl">
         <div className="mb-8 flex flex-col items-center">
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-accent text-white shadow-lg">
             <MessageSquare size={32} />
@@ -85,6 +86,7 @@ const Login = () => {
             Register here
           </Link>
         </p>
+      </div>
       </div>
     </div>
   );

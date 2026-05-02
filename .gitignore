@@ -3,3 +3,8 @@ node_modules
 dist
 build
 .DS_Store
+
+# Kiro specs and IDE settings
+.kiro/
+.vscode/
+

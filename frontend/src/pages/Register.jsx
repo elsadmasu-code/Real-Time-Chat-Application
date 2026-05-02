@@ -5,8 +5,8 @@ import { register, reset } from '../store/slices/authSlice';
 import { MessageSquare } from 'lucide-react';
 
 const Register = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
-  const { name, email, password, confirmPassword } = formData;
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', password: '', confirmPassword: '' });
+  const { name, email, phone, password, confirmPassword } = formData;
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -34,13 +34,14 @@ const Register = () => {
     if (password !== confirmPassword) {
       alert('Passwords do not match');
     } else {
-      dispatch(register({ name, email, password }));
+      dispatch(register({ name, email, phone, password }));
     }
   };
 
   return (
-    <div className="flex h-screen w-full items-center justify-center p-4">
-      <div className="glass w-full max-w-md rounded-3xl p-8 shadow-2xl">
+    <div className="h-screen w-full overflow-y-auto p-4">
+      <div className="flex min-h-full flex-col items-center justify-center py-8">
+        <div className="glass w-full max-w-md rounded-3xl p-8 shadow-2xl">
         <div className="mb-8 flex flex-col items-center">
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-accent text-white shadow-lg">
             <MessageSquare size={32} />
@@ -72,6 +73,17 @@ const Register = () => {
               className="w-full rounded-xl bg-white/5 px-4 py-3 text-white placeholder-gray-500 outline-none transition focus:bg-white/10 focus:ring-2 focus:ring-accent"
               placeholder="john@example.com"
               required
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-300">Phone Number (Optional)</label>
+            <input
+              type="tel"
+              name="phone"
+              value={phone}
+              onChange={onChange}
+              className="w-full rounded-xl bg-white/5 px-4 py-3 text-white placeholder-gray-500 outline-none transition focus:bg-white/10 focus:ring-2 focus:ring-accent"
+              placeholder="+1 234 567 8900"
             />
           </div>
           <div>
@@ -113,6 +125,7 @@ const Register = () => {
             Login here
           </Link>
         </p>
+      </div>
       </div>
     </div>
   );

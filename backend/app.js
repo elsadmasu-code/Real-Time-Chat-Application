@@ -7,6 +7,9 @@ import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
+import mediaRoutes from './routes/mediaRoutes.js';
+import storyRoutes from './routes/storyRoutes.js';
+import callRoutes from './routes/callRoutes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -25,6 +28,9 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/chats', chatRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/media', mediaRoutes);
+app.use('/api/stories', storyRoutes);
+app.use('/api/calls', callRoutes);
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {

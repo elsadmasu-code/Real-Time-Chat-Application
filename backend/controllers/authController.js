@@ -2,7 +2,7 @@ import User from '../models/User.js';
 import generateToken from '../utils/generateToken.js';
 
 export const registerUser = async (req, res) => {
-  const { name, email, password, pic } = req.body;
+  const { name, email, phone, password, pic } = req.body;
 
   if (!name || !email || !password) {
     res.status(400);
@@ -19,6 +19,7 @@ export const registerUser = async (req, res) => {
   const user = await User.create({
     name,
     email,
+    phone,
     password,
     pic,
   });
@@ -28,6 +29,7 @@ export const registerUser = async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      phone: user.phone,
       pic: user.pic,
       token: generateToken(user._id),
     });
@@ -47,6 +49,7 @@ export const authUser = async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      phone: user.phone,
       pic: user.pic,
       token: generateToken(user._id),
     });

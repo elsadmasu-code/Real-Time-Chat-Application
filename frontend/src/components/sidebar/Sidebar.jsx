@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import { Search, MessageSquare, Plus } from 'lucide-react';
+import { Search, MessageSquare, Plus, ArrowLeft } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchChats, setSelectedChat } from '../../store/slices/chatSlice';
+import { logout, reset } from '../../store/slices/authSlice';
 
 const Sidebar = () => {
   const dispatch = useDispatch();
@@ -11,6 +12,11 @@ const Sidebar = () => {
   useEffect(() => {
     dispatch(fetchChats());
   }, [dispatch]);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    dispatch(reset());
+  };
 
   const getSenderName = (loggedUser, users) => {
     return users[0]?._id === loggedUser?._id ? users[1]?.name : users[0]?.name;
@@ -22,11 +28,20 @@ const Sidebar = () => {
 
   return (
     <div className="flex h-full w-80 flex-col border-r border-white/10 bg-sidebarBg p-4 sm:w-96">
-      <div className="mb-6 flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent text-white">
-          <MessageSquare size={20} />
+      <div className="mb-6 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent text-white">
+            <MessageSquare size={20} />
+          </div>
+          <h1 className="text-xl font-bold tracking-wide">QuickChat</h1>
         </div>
-        <h1 className="text-xl font-bold tracking-wide">QuickChat</h1>
+        <button 
+          onClick={handleLogout}
+          className="text-gray-400 hover:text-white transition-colors"
+          title="Logout"
+        >
+          <ArrowLeft size={24} />
+        </button>
       </div>
 
       <div className="relative mb-6">
