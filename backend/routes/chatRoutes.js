@@ -1,7 +1,11 @@
 import express from 'express';
+import { accessChat, fetchChats, createGroupChat } from '../controllers/chatController.js';
+import { protect } from '../middleware/authMiddleware.js';
+
 const router = express.Router();
 
-router.get('/', (req, res) => res.json({ message: 'Chats list' }));
-router.post('/', (req, res) => res.json({ message: 'Create chat' }));
+router.route('/').post(protect, accessChat);
+router.route('/').get(protect, fetchChats);
+router.route('/group').post(protect, createGroupChat);
 
 export default router;

@@ -1,17 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { Search, MessageSquare, Plus } from 'lucide-react';
-
-const mockUsers = [
-  { id: 1, name: 'Caroline Gray', status: 'Online', unread: 0 },
-  { id: 2, name: 'Matthew Walker', status: 'Online', unread: 4 },
-  { id: 3, name: 'Carmen Jacobson', status: 'Online', unread: 0 },
-  { id: 4, name: 'Presley Martin', status: 'Online', unread: 2 },
-  { id: 5, name: 'Alexander Wilson', status: 'Offline', unread: 0 },
-  { id: 6, name: 'Samuel White', status: 'Offline', unread: 0 },
-];
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchChats, setSelectedChat } from '../../store/slices/chatSlice';
 
 const Sidebar = () => {
-  const [activeUser, setActiveUser] = useState(4);
+  const dispatch = useDispatch();
+  const { chats, selectedChat, isLoading } = useSelector((state) => state.chat);
+  const { user } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    dispatch(fetchChats());
+  }, [dispatch]);
+
+  const getSenderName = (loggedUser, users) => {
+    return users[0]?._id === loggedUser?._id ? users[1]?.name : users[0]?.name;
+  };
+
+  const getSenderPic = (loggedUser, users) => {
+    return users[0]?._id === loggedUser?._id ? users[1]?.pic : users[0]?.pic;
+  };
 
   return (
     <div className="flex h-full w-80 flex-col border-r border-white/10 bg-sidebarBg p-4 sm:w-96">
@@ -34,38 +41,45 @@ const Sidebar = () => {
       </div>
 
       <div className="flex-1 overflow-y-auto pr-2">
-        {mockUsers.map((user) => (
-          <div
-            key={user.id}
-            onClick={() => setActiveUser(user.id)}
-            className={`mb-2 flex cursor-pointer items-center justify-between rounded-2xl p-3 transition-all ${
-              activeUser === user.id ? 'bg-white/10 shadow-md' : 'hover:bg-white/5'
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              <div className="relative h-12 w-12 rounded-full bg-gray-600 overflow-hidden border-2 border-transparent">
-                <img src={`https://i.pravatar.cc/150?u=${user.id}`} alt={user.name} className="h-full w-full object-cover" />
-                {user.status === 'Online' && (
-                  <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-[#191728] bg-green-500"></span>
-                )}
-              </div>
-              <div>
-                <h3 className="font-medium text-gray-100">{user.name}</h3>
-                <p className={`text-xs ${user.status === 'Online' ? 'text-green-400' : 'text-gray-400'}`}>
-                  {user.status}
-                </p>
+        {isLoading ? (
+          <p className="text-center text-gray-400">Loading chats...</p>
+        ) : chats && chats.length > 0 ? (
+          chats.map((chat) => (
+            <div
+              key={chat._id}
+              onClick={() => dispatch(setSelectedChat(chat))}
+              className={`mb-2 flex cursor-pointer items-center justify-between rounded-2xl p-3 transition-all ${
+                selectedChat?._id === chat._id ? 'bg-white/10 shadow-md' : 'hover:bg-white/5'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <div className="relative h-12 w-12 rounded-full bg-gray-600 overflow-hidden border-2 border-transparent">
+                  <img 
+                    src={!chat.isGroupChat ? getSenderPic(user, chat.users) : 'https://cdn-icons-png.flaticon.com/512/3233/3233483.png'} 
+                    alt="avatar" 
+                    className="h-full w-full object-cover" 
+                  />
+                  {/* Simplified online status for now */}
+                  {!chat.isGroupChat && (
+                    <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-[#191728] bg-green-500"></span>
+                  )}
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-100">
+                    {!chat.isGroupChat ? getSenderName(user, chat.users) : chat.chatName}
+                  </h3>
+                  <p className="text-xs text-gray-400 truncate w-32">
+                    {chat.latestMessage ? chat.latestMessage.content : 'New chat'}
+                  </p>
+                </div>
               </div>
             </div>
-            {user.unread > 0 && (
-              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-white">
-                {user.unread}
-              </div>
-            )}
-          </div>
-        ))}
+          ))
+        ) : (
+          <p className="text-center text-gray-400 text-sm mt-4">No chats found. Search to start one!</p>
+        )}
       </div>
       
-      {/* Create New Group Button (mock) */}
       <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-white/5 py-3 text-sm font-medium text-white transition-all hover:bg-white/10">
         <Plus size={16} /> Create New Group
       </button>
