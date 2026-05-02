@@ -1,17 +1,32 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-chatBg: #120f1e;
+  --color-sidebarBg: rgba(25, 23, 40, 0.7);
+  --color-bubblePrimary: rgba(124, 88, 252, 0.8);
+  --color-bubbleSecondary: rgba(45, 41, 70, 0.8);
+  --color-accent: #9d7cff;
+  --font-family-sans: 'Inter', sans-serif;
+}
 
 @layer base {
   body {
-    @apply m-0 p-0 font-sans text-white bg-[#0b0813];
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    color: white;
+    background-color: #0b0813;
     overflow: hidden;
   }
 }
 
 /* Glassmorphism utility */
 .glass {
-  @apply bg-sidebarBg backdrop-blur-md border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)];
+  background-color: rgba(25, 23, 40, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
 /* Background Gradients */
