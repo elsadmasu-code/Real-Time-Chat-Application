@@ -3,8 +3,13 @@ import app from './app.js';
 import connectDB from './config/db.js';
 import { initializeSocket } from './socket/socketManager.js';
 import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+dotenv.config({ path: join(__dirname, '.env') });
 
 const server = http.createServer(app);
 
